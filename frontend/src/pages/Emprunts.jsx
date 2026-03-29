@@ -114,7 +114,7 @@ const Emprunts = () => {
 
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-4 bg-[#014455] text-white px-10 py-2 rounded-lg cursor-pointer"
+          className="flex items-center gap-4 bg-[#014455] hover:bg-[#235766] text-white px-10 py-2 rounded-lg cursor-pointer"
         >
           <FaCirclePlus size={22} />
           <span>Nouvel emprunt</span>
@@ -338,49 +338,11 @@ const Emprunts = () => {
                     onChange={(e) => setDateemprunt(e.target.value)}
                   />
                 </div>
-                {/* <div className="flex-1">
-                    <label
-                      htmlFor="retour-date"
-                      className="text-sm text-slate-500"
-                    >
-                      Date de retour prévu
-                    </label>
-                    <input
-                      type="date"
-                      id="retour-date"
-                      placeholder="Date de retour"
-                      className="p-2 rounded-lg border border-gray-200 w-full"
-                      // value={pourcentage}
-                      // onChange={(e) => setPourcentage(e.target.value)}
-                    />
-                  </div> */}
-                {/* </div> */}
-
-                {/* <div className="flex-1">
-              <label htmlFor="type_etape" className="text-slate-500">
-                Type de l'étape
-              </label>
-              <select
-                onChange={(e) => setType(e.target.value)}
-                name="type_etape"
-                id="type_etape"
-                value={type}
-                className="p-2 rounded-lg border border-gray-200 w-full"
-              >
-                <option value="">Selectionner un type</option>
-                {data?.length > 0 &&
-                  data.map((da, idx) => (
-                    <option key={idx} value={da._id}>
-                      {da.type}
-                    </option>
-                  ))}
-              </select>
-            </div> */}
 
                 <div className="flex justify-end">
                   <button
                     type="submit"
-                    className="rounded-sm px-8 py-2 text-sm font-semibold active:scale-95 cursor-pointer transition-colors bg-[#014455] text-white hover:bg-blue-800"
+                    className="rounded-sm px-8 py-2 text-sm font-semibold active:scale-95 cursor-pointer transition-colors bg-[#014455] text-white hover:bg-[#235766]"
                   >
                     Ajouter
                   </button>

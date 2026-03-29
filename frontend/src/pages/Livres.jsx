@@ -100,7 +100,7 @@ const Livres = () => {
 
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-4 bg-[#014455] text-white px-10 py-2 rounded-lg cursor-pointer"
+          className="flex items-center gap-4 bg-[#014455] hover:bg-[#235766] text-white px-10 py-2 rounded-lg cursor-pointer"
         >
           <FaBookOpen size={22} />
           <span>Ajouter un livre</span>
@@ -345,7 +345,7 @@ const Livres = () => {
                 <div className="flex justify-end mb-3">
                   <button
                     type="submit"
-                    className="rounded-sm px-8 py-2 text-sm font-semibold active:scale-95 cursor-pointer transition-colors bg-[#014455] text-white hover:bg-blue-800"
+                    className="rounded-sm px-8 py-2 text-sm font-semibold active:scale-95 cursor-pointer transition-colors bg-[#014455] text-white hover:bg-[#235766]"
                   >
                     Ajouter
                   </button>
