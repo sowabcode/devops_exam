@@ -17,7 +17,8 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                sh "cd ${PATH} docker compose build"
+                sh 'cd ${PATH}'
+                sh 'docker compose build'
             }
         }
 
