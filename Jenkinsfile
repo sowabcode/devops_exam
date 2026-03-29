@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         COMPOSE_FILE = "docker-compose.yml"
-        PATH = "/Users/sowabcode/Documents/Master\ 1\ AI\ DIT/DevOps/Exercices/DevOps_Exam"
+        PATH = "/Users/sowabcode/Documents/Master 1 AI DIT/DevOps/Exercices/DevOps_Exam"
         // agent = "sowab"
     }
 
