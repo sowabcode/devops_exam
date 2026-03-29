@@ -1,20 +1,21 @@
+import clsx from "clsx";
 import { useContext, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import LayoutContext from "../contexts/LayoutContext";
 
-import { BsFillGridFill } from "react-icons/bs";
+import { BsFillGridFill, BsSearch } from "react-icons/bs";
+import { MdDeleteForever, MdEdit } from "react-icons/md";
 import { FaBookOpen, FaListUl, FaXmark } from "react-icons/fa6";
 
 import m1 from "../assets/m1.jpeg";
-import { AnimatePresence, motion } from "framer-motion";
-import clsx from "clsx";
-import { MdDeleteForever, MdEdit } from "react-icons/md";
 
 const Livres = () => {
   const queryClient = useQueryClient();
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
+  const [query, setQuery] = useState("");
   const [titre, setTitre] = useState("");
   const [annee, setAnnee] = useState("");
   const [auteur, setAuteur] = useState("");
@@ -27,17 +28,23 @@ const Livres = () => {
 
   const { showSidebar } = useContext(LayoutContext);
 
-  const {
-    // isPending,
-    // error,
-    data: livres,
-  } = useQuery({
+  const { data: allLivres } = useQuery({
     queryKey: ["livres"],
     queryFn: () => fetch(`${BASE_URL}/api/livres`).then((res) => res.json()),
   });
 
+  const filteredLivres =
+    query &&
+    allLivres.filter(
+      (livre) =>
+        livre.titre.toLowerCase().includes(query.trim().toLowerCase()) ||
+        livre.auteur.toLowerCase().includes(query.trim().toLowerCase()) ||
+        livre.categorie.toLowerCase().includes(query.trim().toLowerCase()),
+    );
+
+  const livres = query.trim() !== "" ? filteredLivres : allLivres;
+
   const cleanData = () => {
-    // setIsbn("");
     setTitre("");
     setAnnee("");
     setAuteur("");
@@ -87,13 +94,13 @@ const Livres = () => {
   };
 
   return (
-    <main className={`${!showSidebar ? "main" : "main-full"} bg-slate-50`}>
+    <main className={`${!showSidebar ? "main" : "main-full"} bg-slate-100`}>
       <div className="flex items-center justify-between gap-4">
         <h1 className="font-bold text-3xl">Bibliothèque &gt; Livres</h1>
 
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-4 bg-blue-950 text-white px-10 py-2 rounded-lg cursor-pointer"
+          className="flex items-center gap-4 bg-[#014455] text-white px-10 py-2 rounded-lg cursor-pointer"
         >
           <FaBookOpen size={22} />
           <span>Ajouter un livre</span>
@@ -101,7 +108,7 @@ const Livres = () => {
       </div>
 
       <div className="grid grid-cols-4 gap-4 mt-5">
-        <div className="px-3 py-2 bg-gray-100 shadow-md rounded-lg border-l-4 border-blue-700 space-y-2">
+        <div className="px-3 py-2 bg-white shadow-md rounded-lg border-l-4 border-[#014455] space-y-2">
           <h3 className="text-slate-400 text-lg">Total livres</h3>
           <p className="text-3xl">{livres?.length}</p>
         </div>
@@ -119,12 +126,23 @@ const Livres = () => {
         </div> */}
       </div>
 
-      <div className="flex items-center gap-4 rounded-lg bg-gray-100 py-3 px-2 mt-6">
-        <input
-          type="search"
-          placeholder="Rechercher un livre..."
-          className="flex-1 border border-slate-300 py-2 rounded-lg px-2"
-        />
+      <div className="flex items-center gap-4 rounded-lg bg-white py-3 px-2 mt-6">
+        <div className="relative flex-1 border border-slate-300 py-2 rounded-lg px-2">
+          <input
+            type="search"
+            name="query"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Rechercher un livre..."
+            className="border-none outline-none w-full h-full"
+          />
+          <div
+            // onClick={handleSeache}
+            className="absolute right-1 top-1/2 -translate-y-1/2 grid place-items-center px-6 py-2 bg-[#235766] rounded-lg cursor-pointer"
+          >
+            <BsSearch size={18} className="text-white" />
+          </div>
+        </div>
         <input
           type="text"
           placeholder="ISBN"
@@ -137,7 +155,7 @@ const Livres = () => {
         />
 
         <div className="flex items-center gap-2 p-2 bg-white rounded-lg">
-          <div className="grid place-items-center p-1.5 bg-blue-950 text-white rounded-lg">
+          <div className="grid place-items-center p-1.5 bg-[#235766] text-white rounded-lg">
             <FaListUl size={22} />
           </div>
           <div className="grid place-items-center p-1">
@@ -151,7 +169,7 @@ const Livres = () => {
           livres.map((livre) => (
             <div
               key={livre.id}
-              className="relative group shadow-md rounded-lg bg-gray-100 flex flex-col items-center justify-center"
+              className="relative group shadow-md rounded-lg bg-white flex flex-col items-center justify-center"
               // shadow-md rounded-lg bg-gray-100 flex flex-col overflow-hidden
             >
               <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">

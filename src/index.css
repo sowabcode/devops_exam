@@ -9,11 +9,11 @@
 }
 
 .main {
-  @apply fixed top-[70px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-70px)] p-4 overflow-y-auto transition-all delay-150 duration-150 z-20;
+  @apply fixed top-[70px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-70px)] p-4 overflow-y-auto transition-all delay-150 duration-150 z-20 pb-20;
 }
 
 .main-full {
-  @apply fixed top-[70px] left-2.5 w-[calc(100%-10px)] h-[calc(100%-70px)] p-4 overflow-y-auto transition-all delay-150 duration-150 z-20;
+  @apply fixed top-[70px] left-2.5 w-[calc(100%-10px)] h-[calc(100%-70px)] p-4 overflow-y-auto transition-all delay-150 duration-150 z-20 pb-20;
 }
 
 .poppins-thin {

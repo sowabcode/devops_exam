@@ -108,13 +108,13 @@ const Emprunts = () => {
   };
 
   return (
-    <main className={`${!showSidebar ? "main" : "main-full"} bg-slate-50`}>
+    <main className={`${!showSidebar ? "main" : "main-full"} bg-slate-100`}>
       <div className="flex items-center justify-between gap-4">
         <h1 className="font-bold text-3xl">Bibliothèque &gt; Emprunts</h1>
 
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-4 bg-blue-950 text-white px-10 py-2 rounded-lg cursor-pointer"
+          className="flex items-center gap-4 bg-[#014455] text-white px-10 py-2 rounded-lg cursor-pointer"
         >
           <FaCirclePlus size={22} />
           <span>Nouvel emprunt</span>
@@ -122,7 +122,7 @@ const Emprunts = () => {
       </div>
 
       <div className="grid grid-cols-4 gap-4 mt-5">
-        <div className="px-3 py-2 bg-gray-100 shadow-md rounded-lg border-l-4 border-blue-700 space-y-2">
+        <div className="px-3 py-2 bg-white shadow-md rounded-lg border-l-4 border-[#014455] space-y-2">
           <h3 className="text-slate-400 text-lg">Total Emprunts</h3>
           <p className="text-3xl">{emprunts?.length}</p>
         </div>
@@ -140,7 +140,7 @@ const Emprunts = () => {
         </div> */}
       </div>
 
-      <div className="bg-gray-100 rounded-lg p-3 mt-6 overflow-x-auto">
+      <div className="bg-white rounded-lg p-3 mt-6 overflow-x-auto shadow-lg">
         <div className="flex items-center justify-between gap-10">
           <input
             type="search"
@@ -151,7 +151,7 @@ const Emprunts = () => {
           <div className="flex items-center gap-4">
             <p>Afficher :</p>
             <div className="bg-white p-1 flex items-center gap-4 rounded-lg">
-              <p className="rounded-lg bg-blue-950 text-white py-1.5 px-4 cursor-pointer">
+              <p className="rounded-lg bg-[#235766] text-white py-1.5 px-4 cursor-pointer">
                 Tous
               </p>
               <p>Actifs</p>
@@ -241,7 +241,7 @@ const Emprunts = () => {
                     <div className="py-4 ">
                       <button
                         onClick={() => handleRetournerLivre(emprunt.id)}
-                        className="rounded-lg py-2 px-4 bg-blue-950 text-white text-sm"
+                        className="rounded-lg py-2 px-4 bg-[#235766] text-white text-sm"
                       >
                         Retourner
                       </button>

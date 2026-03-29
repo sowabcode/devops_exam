@@ -7,6 +7,7 @@ import profile from "../assets/images.jpeg";
 import { MdDeleteForever } from "react-icons/md";
 import { FaUserEdit } from "react-icons/fa";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { BsSearch } from "react-icons/bs";
 
 const types = [
   { id: "enseignant", nom: "Enseignant" },
@@ -19,6 +20,7 @@ const Utilisateurs = () => {
 
   const [nom, setNom] = useState("");
   const [type, setType] = useState("");
+  const [query, setQuery] = useState("");
   const [email, setEmail] = useState("");
   const [prenom, setPrenom] = useState("");
   const [isOpen, setOpen] = useState(false);
@@ -26,11 +28,22 @@ const Utilisateurs = () => {
 
   const { showSidebar } = useContext(LayoutContext);
 
-  const { data: utilisateurs } = useQuery({
+  const { data: allUsers } = useQuery({
     queryKey: ["utilisateurs"],
     queryFn: () =>
       fetch(`${BASE_URL}/api/utilisateurs`).then((res) => res.json()),
   });
+
+  const filteredUsers =
+    query &&
+    allUsers.filter(
+      (livre) =>
+        livre.nom.toLowerCase().includes(query.trim().toLowerCase()) ||
+        livre.prenom.toLowerCase().includes(query.trim().toLowerCase()) ||
+        livre.email.toLowerCase().includes(query.trim().toLowerCase()),
+    );
+
+  const utilisateurs = query.trim() !== "" ? filteredUsers : allUsers;
 
   const cleanData = () => {
     setNom("");
@@ -80,13 +93,13 @@ const Utilisateurs = () => {
   };
 
   return (
-    <main className={`${!showSidebar ? "main" : "main-full"} bg-slate-50`}>
+    <main className={`${!showSidebar ? "main" : "main-full"} bg-slate-100`}>
       <div className="flex items-center justify-between gap-4">
         <h1 className="font-bold text-3xl">Bibliothèque &gt; Utilisateurs</h1>
 
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-4 bg-blue-950 text-white px-10 py-2 rounded-lg cursor-pointer"
+          className="flex items-center gap-4 bg-[#014455] text-white px-10 py-2 rounded-lg cursor-pointer"
         >
           <FaUserPlus size={22} />
           <span>Ajouter un utilisateur</span>
@@ -94,28 +107,45 @@ const Utilisateurs = () => {
       </div>
 
       <div className="grid grid-cols-4 gap-4 mt-5">
-        <div className="px-3 py-2 bg-gray-100 shadow-md rounded-lg border-l-4 border-blue-700 space-y-2">
+        <div className="px-3 py-2 bg-white shadow-md rounded-lg border-l-4 border-[#014455] space-y-2">
           <h3 className="text-slate-400 text-lg">Total utilisateurs</h3>
           <p className="text-3xl">{utilisateurs?.length}</p>
         </div>
       </div>
 
-      <div className="bg-gray-100 rounded-lg p-3 mt-6 overflow-x-auto">
+      <div className="bg-white shadow-lg rounded-lg p-3 mt-6 overflow-x-auto">
         <div className="flex items-center justify-between gap-10">
-          <input
+          <div className="relative flex-1 border border-slate-300 py-2 rounded-lg px-2">
+            <input
+              type="search"
+              name="query"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Rechercher un utilisateur..."
+              className="border-none outline-none w-full h-full"
+            />
+            <div
+              // onClick={handleSeache}
+              className="absolute right-1 top-1/2 -translate-y-1/2 grid place-items-center px-6 py-2 bg-[#235766] rounded-lg cursor-pointer"
+            >
+              <BsSearch size={18} className="text-white" />
+            </div>
+          </div>
+          {/* <input
             type="search"
-            placeholder="Rechercher un livre..."
+            placeholder="Rechercher un utilisateur..."
             className="flex-1 border border-slate-300 py-2 rounded-lg px-2"
-          />
+          /> */}
 
           <div className="flex items-center gap-4">
             <p>Afficher :</p>
             <div className="bg-white p-1 flex items-center gap-4 rounded-lg">
-              <p className="rounded-lg bg-blue-950 text-white py-1.5 px-4 cursor-pointer">
-                Tous
+              <p className="rounded-lg bg-[#235766] text-white py-1.5 px-4 cursor-pointer">
+                Tout
               </p>
-              <p>Actifs</p>
-              <p>Retards</p>
+              <p>Etudiant</p>
+              <p>Enseignant</p>
+              <p>Personnel</p>
             </div>
           </div>
         </div>
@@ -124,16 +154,16 @@ const Utilisateurs = () => {
           <thead>
             <tr className="text-gray-700 uppercase">
               <th className="text-start border-b border-slate-300">
-                <div className="py-2">Prénom et nom</div>
+                <div className="py-2 font-bold">Prénom et nom</div>
               </th>
               <th className="text-start border-b border-slate-300">
-                <div className="py-2">Email</div>
+                <div className="py-2 font-bold">Email</div>
               </th>
               <th className="text-start border-b border-slate-300">
-                <div className="py-2">Type</div>
+                <div className="py-2 font-bold">Type</div>
               </th>
               <th className="text-end border-b border-slate-300">
-                <div className="py-2">Actions</div>
+                <div className="py-2 font-bold">Actions</div>
               </th>
             </tr>
           </thead>
@@ -142,7 +172,7 @@ const Utilisateurs = () => {
               utilisateurs.map((user) => (
                 <tr key={user.id}>
                   <td className="border-b border-slate-300">
-                    <div className="flex items-center gap-4 py-4 ">
+                    <div className="flex items-center gap-4 py-3 ">
                       <img
                         src={profile}
                         alt="profile"
@@ -158,17 +188,17 @@ const Utilisateurs = () => {
                     </div>
                   </td>
                   <td className="text-start border-b border-slate-300">
-                    <div className="py-4 ">
+                    <div className="py-3 ">
                       <h2>{user.email}</h2>
                     </div>
                   </td>
                   <td className="text-left border-b border-slate-300">
-                    <div className="py-4 ">
+                    <div className="py-3 ">
                       <p className="uppercase">{user.type}</p>
                     </div>
                   </td>
                   <td className="text-end border-b border-slate-300">
-                    <div className="py-4 flex justify-end gap-4">
+                    <div className="py-3 flex justify-end gap-4">
                       <FaUserEdit
                         size={22}
                         className="text-blue-400 cursor-pointer"
@@ -177,8 +207,6 @@ const Utilisateurs = () => {
                         size={22}
                         className="text-red-400 cursor-pointer"
                       />
-                      {/* <button className="rounded-lg py-2 px-4 bg-blue-950 text-white text-sm">
-                  </button> */}
                     </div>
                   </td>
                 </tr>
