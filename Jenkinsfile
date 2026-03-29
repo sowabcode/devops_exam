@@ -2,51 +2,82 @@ pipeline {
     agent any
 
     environment {
-        COMPOSE_FILE = "docker-compose.yml"
-        PATH = "/Users/sowabcode/Documents/Master 1 AI DIT/DevOps/Exercices/DevOps_Exam"
-        // agent = "sowab"
+        COMPOSE_FILE = 'docker-compose.yml'
+        APP_NAME     = 'bibliotheque-dit'
     }
 
     stages {
-        stage('Checkout') {
+
+        stage('Récupération du code') {
             steps {
-                // sshagent(credentials: [$agent])
-                git branch: 'main', url: 'https://github.com/sowabcode/devops_exam.git'
+                echo ' Clonage du dépôt GitHub...'
+                checkout scm
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Vérification de l\'environnement') {
             steps {
-                sh 'cd ${PATH}'
-                sh 'docker compose build'
+                echo '🔍 Vérification des outils disponibles...'
+                sh 'docker --version'
+                sh 'docker compose version'
             }
         }
 
-        stage('Stop Old Containers') {
+        stage('Build des images Docker') {
             steps {
-                sh 'docker compose down'
+                echo ' Construction des images Docker...'
+                sh 'docker compose -f ${COMPOSE_FILE} build --no-cache'
             }
         }
 
-        stage('Run Containers') {
+        stage('Arrêt des conteneurs existants') {
             steps {
-                sh 'docker compose up -d'
+                echo ' Arrêt des anciens conteneurs...'
+                sh 'docker compose -f ${COMPOSE_FILE} down --remove-orphans || true'
             }
         }
 
-        stage('Verify Containers') {
+        stage('Déploiement') {
             steps {
-                sh 'docker ps'
+                echo ' Démarrage des services...'
+                sh 'docker compose -f ${COMPOSE_FILE} up -d'
+            }
+        }
+
+        stage('Vérification du déploiement') {
+            steps {
+                echo ' Vérification que les services sont actifs...'
+                sh 'sleep 15'
+                sh 'docker compose -f ${COMPOSE_FILE} ps'
+                sh '''
+                    docker compose -f ${COMPOSE_FILE} ps | grep "backend" | grep "Up" \
+                    && echo "Backend opérationnel" \
+                    || echo " Backend non démarré"
+                '''
+                sh '''
+                    docker compose -f ${COMPOSE_FILE} ps | grep "frontend" | grep "Up" \
+                    && echo " Frontend opérationnel" \
+                    || echo "  Frontend non démarré"
+                '''
             }
         }
     }
 
     post {
         success {
-            echo 'Déploiement réussi !'
+            echo '''
+             Pipeline exécuté avec succès !
+             Frontend  : http://localhost:3000
+             Backend   : http://localhost:8000
+             API Docs  : http://localhost:8000/docs
+            '''
         }
         failure {
-            echo 'Échec du pipeline'
+            echo ' Pipeline échoué. Consultez les logs ci-dessus.'
+            sh 'docker compose -f ${COMPOSE_FILE} logs --tail=50 || true'
+        }
+        always {
+            echo ' Fin du pipeline Jenkins.'
         }
     }
 }
